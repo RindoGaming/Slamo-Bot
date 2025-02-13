@@ -1,0 +1,389 @@
+{
+  "name": "Slamo %Weather",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -100,
+        -180
+      ],
+      "id": "06679855-9925-44e1-979c-4ba799976476",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "cityName": "={{ $json.output }}"
+      },
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1,
+      "position": [
+        840,
+        80
+      ],
+      "id": "22a8bc23-5bc5-46b2-92b1-60fa99259b79",
+      "name": "OpenWeatherMap",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "y4kBPpFj77yH8p11",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=I want you to generate me a weather forecast with the following information and keep it within 2000 characters including whitespaces.\n\n- temprature: {{ $json.main.temp }}\n- feels like: {{ $json.main.feels_like }}\n- description: {{ $json.weather[0].description }}\n- wind speed: {{ $json.wind.speed }}\n- wind angle: {{ $json.wind.deg }} (send this if it is going north, south, etc)\n- city name: {{ $json.name }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1060,
+        80
+      ],
+      "id": "855cf2ca-a6ce-4d71-af95-bfd24e7bb313",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        260
+      ],
+      "id": "c89f2083-535f-4ac2-80fb-f9d3160fcf58",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "Mq1Z1pk7AhNKaBCB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let input = $input.first().json.content;\nlet location = input.replace(\"%weather \", \"\");\nreturn [\n  {\n    output: location,\n  }\n]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        -180
+      ],
+      "id": "d0c01d9e-c4ad-47ce-8075-6447b03a610f",
+      "name": "Remove %weather"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "59acc0d0-d713-4038-9765-dea78a0a2f48",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        380,
+        -180
+      ],
+      "id": "fd28ef1b-af87-4cc2-b5ff-689fd861a72a",
+      "name": "check if its empty"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4f26a475-3085-4911-a753-1537e9d363d4",
+              "leftValue": "={{ $('Remove %weather').item.json.output }}",
+              "rightValue": "%weather",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        -100
+      ],
+      "id": "f5c940ca-afa4-47b6-a621-57612f1abaf8",
+      "name": "check if it still includes %weather for some reason"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "Error: No city has been entered",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        840,
+        -200
+      ],
+      "id": "addab4ce-def9-4f11-b253-1d9a95af63d4",
+      "name": "send error",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "=Generating weather for: {{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        840,
+        -40
+      ],
+      "id": "788e692f-ae35-4969-b4fa-37463d706f6c",
+      "name": "generating message",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        80
+      ],
+      "id": "fee851b8-04c0-4656-9e4f-ce8875ba4d34",
+      "name": "send weather",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Get the weather of the sent command and send it back",
+        "height": 700,
+        "width": 1800,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -140,
+        -300
+      ],
+      "typeVersion": 1,
+      "id": "7f774bc4-839a-43a5-9e43-ff13880c4a9a",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Remove %weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeatherMap": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "send weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove %weather": {
+      "main": [
+        [
+          {
+            "node": "check if its empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check if its empty": {
+      "main": [
+        [
+          {
+            "node": "send error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "check if it still includes %weather for some reason",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check if it still includes %weather for some reason": {
+      "main": [
+        [
+          {
+            "node": "send error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "generating message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OpenWeatherMap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generating message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "21320cb0-3ea2-4725-945a-9d40f3490e31",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a0bac48fea17e2b37b73f987dbd3e652027c2b7184e8b942e96a9eb80ec425a8"
+  },
+  "id": "tpDIm9Q1CX9Ic1uC",
+  "tags": []
+}

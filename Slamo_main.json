@@ -1,0 +1,692 @@
+{
+  "name": "Slamo main",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "# Command list\n\n- %cmds (shows all commands)\n- %aboutme (tells you more about me :D)\n- %ai {TEXT INPUT} (respond to an ai)\n- %form (sends you a github issue form)\n- %weather {CITY NAME} (sends the weather of the city you entered)\n- %calculate {CALCULATION} (sends the awnser of what you want)\n- %data (allows you too add or send data use %data help for commands)\n- %nasapotd (sends todays astronomy picture with an explanation)\n- %spotify {MUSIC, ARTIST OR ALBUM} {INPUT} (searches for the first 5 results if possible)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -680,
+        -360
+      ],
+      "id": "d915cd49-57a9-4a29-a412-3939cdda5a50",
+      "name": "cmd list",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "channelIds": [
+          "1338790128969187429"
+        ],
+        "value": "%"
+      },
+      "type": "n8n-nodes-discord.discordTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1320,
+        40
+      ],
+      "id": "7b1babb3-3e6f-44e0-84ca-072f4cd726fb",
+      "name": "register command",
+      "webhookId": "86c08c93-2bd0-4fd3-bba5-a969195da404",
+      "credentials": {
+        "discordApi": {
+          "id": "FcuWceELppSUCLGd",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "wg865DKp07an15PJ"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        -680
+      ],
+      "id": "a14660c2-183a-45a6-bda8-40ac2d0b1591",
+      "name": "execute %ai"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%ai",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%ai"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "cb2d94ea-a2a1-4101-ab2c-e90070d2da88",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%form",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%form"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "426332c8-05dd-4d77-8f95-6d04234958aa",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%cmds",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%cmds"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "39d07a74-f256-4a6a-b3d0-2edd4ad48be9",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%weather",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%weather"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ee7addb3-487b-48b2-bd7d-c41385d64f27",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%calculate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%calculate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f9bb9ddf-d450-452a-b881-af5b35a69621",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%data",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%data"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "928b9af6-bc20-427d-b380-8c67e22ca658",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%nasapotd",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%nasapotd"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6739cac8-a91d-468f-a2bb-7e7197ef1318",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%aboutme",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "$aboutme"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "128e2303-7f3f-4ca9-a17a-2c01896a3482",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%spotify",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "%spotify"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1140,
+        -80
+      ],
+      "id": "0c4ae53d-2157-425c-aca9-93387a30d24d",
+      "name": "detect command"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "# Heres the link to the github issue form.\n\nhttps://credible-concise-foal.ngrok-free.app/form/1bbf0d14-ed6f-4151-9cac-8f01b5dbbcd1\n\nFeel free to use this to make sending issues easier.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -680,
+        -520
+      ],
+      "id": "8186c6a0-fc71-4281-9405-316c6d9b29c0",
+      "name": "send form link",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "tpDIm9Q1CX9Ic1uC"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        -200
+      ],
+      "id": "71901092-6a49-462d-be2c-b7257b93cf53",
+      "name": "execute %weather"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "f2AuFejOi3aHV1VT"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        -40
+      ],
+      "id": "c1be8670-b4c3-4d42-bebf-4bd904791c83",
+      "name": "execute %calculate"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "zIpkxwP6zwDrI5Lt"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        120
+      ],
+      "id": "0ba02506-383e-44df-a24a-f8cedde9c449",
+      "name": "execute %data"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.nasa",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        300
+      ],
+      "id": "eb90f299-c7e6-41af-9939-17f2f4bb1ee0",
+      "name": "get picture",
+      "credentials": {
+        "nasaApi": {
+          "id": "jXF3VPV2Nw01QDiV",
+          "name": "NASA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "=# Here is today's astronomy image.",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "description": "={{ $json.explanation }}",
+              "image": "={{ $json.hdurl }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        300
+      ],
+      "id": "33160b9e-f141-4253-bdab-3f46ed53f969",
+      "name": "send picture",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "Oh you want to know more about me? Well I am happy to hear that :D\n\nWell my name is Slamo but you already knew that. I am here just to see your commands and send it over to the upper management (I added a picture of everyone). Basically I am the janitor and I clean the stuff down here and the rest deals with everything else.\n\nIf you want to learn more about me feel free too look at the attached link.",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "title": "Me and my friends :D",
+              "url": "https://jtoh.fandom.com/wiki/Slamo#Ring_1",
+              "image": "https://static.wikia.nocookie.net/5c1cefda-2ccb-47d4-aa91-ad81930fe69e/scale-to-width/755"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -680,
+        480
+      ],
+      "id": "a44377ef-7d93-4b6a-88bd-9494af5cd0f1",
+      "name": "explanation",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xUR3aiukVnPRSHQE"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        660
+      ],
+      "id": "81ad3786-7ab4-4d79-a982-69a6967be67c",
+      "name": "execute %spotify"
+    },
+    {
+      "parameters": {
+        "content": "# Main command handler",
+        "height": 1580,
+        "width": 1120,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1380,
+        -720
+      ],
+      "typeVersion": 1,
+      "id": "f718a1a5-4749-4fc6-a8d2-48c08bdf50ed",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "register command": {
+      "main": [
+        [
+          {
+            "node": "detect command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cmd list": {
+      "main": [
+        []
+      ]
+    },
+    "detect command": {
+      "main": [
+        [
+          {
+            "node": "execute %ai",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "send form link",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "cmd list",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "execute %weather",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "execute %calculate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "execute %data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get picture",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "explanation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "execute %spotify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get picture": {
+      "main": [
+        [
+          {
+            "node": "send picture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b02d360e-8177-41df-8bb3-f2745824bd17",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a0bac48fea17e2b37b73f987dbd3e652027c2b7184e8b942e96a9eb80ec425a8"
+  },
+  "id": "Ue15DeVsDizpHmwL",
+  "tags": []
+}

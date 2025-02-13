@@ -1,0 +1,191 @@
+{
+  "name": "Slamo %ai",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are getting used as a chat bot for a discord server. Whenever someone responds with %ai they will call you. Ignore the %ai and dont mention it at all, and respond to anything posted after that with a max of 2000 characters including white spaces.\n\nThey said: {{ $json.content }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1720,
+        820
+      ],
+      "id": "36c8810d-ae31-4078-9b90-a347176d834d",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        980
+      ],
+      "id": "916af522-b375-4150-8c6c-0e3a35e4a353",
+      "name": "Ollama Chat Model1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "Mq1Z1pk7AhNKaBCB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Discord AI chatbot powered on Ollama",
+        "height": 560,
+        "width": 880,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1440,
+        580
+      ],
+      "typeVersion": 1,
+      "id": "155d0b59-44b5-4f1f-87a0-32fd7705d24d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "Thinking of response...",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        640
+      ],
+      "id": "3efd0aec-903d-4551-9f68-d3cd498e07a3",
+      "name": "Generating",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        820
+      ],
+      "id": "37ad7a3f-f99a-4a6c-a43c-1296e652b15c",
+      "name": "Respond to user",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1480,
+        820
+      ],
+      "id": "abc5a95f-3810-4611-ae9b-52125a26685d",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Ollama Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Generating",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "33e78194-4abf-413e-b939-123e0ba5d79a",
+  "meta": {
+    "instanceId": "a0bac48fea17e2b37b73f987dbd3e652027c2b7184e8b942e96a9eb80ec425a8"
+  },
+  "id": "wg865DKp07an15PJ",
+  "tags": []
+}

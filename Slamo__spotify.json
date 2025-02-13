@@ -1,0 +1,835 @@
+{
+  "name": "Slamo %spotify",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        20,
+        -300
+      ],
+      "id": "2146615e-1b0e-4c4c-aa64-b767009d3bff",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "resource": "track",
+        "operation": "search",
+        "query": "={{ $json.output }}",
+        "limit": 5,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.spotify",
+      "typeVersion": 1,
+      "position": [
+        900,
+        -240
+      ],
+      "id": "b0e4af64-39ed-46b5-bd6c-cfc2b2d461e1",
+      "name": "Spotify",
+      "credentials": {
+        "spotifyOAuth2Api": {
+          "id": "2uJJLx2JX2CB6T0p",
+          "name": "Spotify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        -240
+      ],
+      "id": "ed4a6f2e-0311-4453-a8fd-662762da30df",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "resource": "artist",
+        "operation": "search",
+        "query": "={{ $json.output }}",
+        "limit": 5,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.spotify",
+      "typeVersion": 1,
+      "position": [
+        900,
+        40
+      ],
+      "id": "6293f5d3-8a24-496f-adfe-3b4a264a5e3b",
+      "name": "Spotify1",
+      "credentials": {
+        "spotifyOAuth2Api": {
+          "id": "2uJJLx2JX2CB6T0p",
+          "name": "Spotify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        40
+      ],
+      "id": "336d30ef-080d-4bc5-b9e2-fa22ec0a6102",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "resource": "album",
+        "operation": "search",
+        "query": "={{ $json.output }}",
+        "limit": 5,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.spotify",
+      "typeVersion": 1,
+      "position": [
+        900,
+        320
+      ],
+      "id": "e139ce74-7356-4e72-b65a-f11ed59a2aca",
+      "name": "Spotify3",
+      "credentials": {
+        "spotifyOAuth2Api": {
+          "id": "2uJJLx2JX2CB6T0p",
+          "name": "Spotify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        320
+      ],
+      "id": "3f1d2c75-b668-4f7a-b9f2-a97b3572f593",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        340
+      ],
+      "id": "08de37ba-c18a-4966-90bf-638f50c83f29",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "content": "# Find spotify songs, albums and artists",
+        "height": 1000,
+        "width": 1620,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -40,
+        -440
+      ],
+      "typeVersion": 1,
+      "id": "4fdd78af-79dc-41e8-aa27-b939af2397d8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "music",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "music"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5d695907-af59-4fe6-b7fd-01ebbb5e2270",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "artist",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "artist"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f27292b7-71b4-4c40-80d9-10802301dc56",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "album",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "album"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        -320
+      ],
+      "id": "f9e72d2f-39e3-4896-8dbf-6f66ba98b168",
+      "name": "check what got sent"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "Please specify if you want music, artist, album or playlist and type in what you want.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        240,
+        40
+      ],
+      "id": "ea4c4ffa-8330-499b-9c6f-74a4f4f1e2d5",
+      "name": "nonexistant command",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "ERROR: Spotify server is having issues. Try your search again.\nIf it persists please try a different search.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        300,
+        340
+      ],
+      "id": "15522e2a-415a-4591-81c1-72fa5edbc408",
+      "name": "spotify api having issues",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "# Here are the first couple of results of your search",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        700,
+        -380
+      ],
+      "id": "20275a4c-54ae-4a3c-a1c0-850852835ced",
+      "name": "wait message",
+      "executeOnce": true,
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "# Here are the first couple of results of your search",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        700,
+        -100
+      ],
+      "id": "fed19e59-025f-43b7-9a55-677380159de5",
+      "name": "wait message1",
+      "executeOnce": true,
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "# Here are the first couple of results of your search",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        700,
+        180
+      ],
+      "id": "22b387a2-53fb-492d-bccd-7ab23aa2cd82",
+      "name": "wait message2",
+      "executeOnce": true,
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let input = $input.first().json.content;\nlet value = input.replace(\"%spotify music \", \"\");\nreturn [\n  {\n    output: value,\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        -240
+      ],
+      "id": "3e98f330-6a0f-410f-9470-1cbf5e475aba",
+      "name": "remove %spotify music"
+    },
+    {
+      "parameters": {
+        "jsCode": "let input = $input.first().json.content;\nlet value = input.replace(\"%spotify artist \", \"\");\nreturn [\n  {\n    output: value,\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        40
+      ],
+      "id": "811b4676-75bc-4aa7-b48b-3b7185bdc9b3",
+      "name": "remove %spotify artist"
+    },
+    {
+      "parameters": {
+        "jsCode": "let input = $input.first().json.content;\nlet value = input.replace(\"%spotify album \", \"\");\nreturn [\n  {\n    output: value,\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        320
+      ],
+      "id": "7958051f-e051-4800-bc82-c5c5ad994287",
+      "name": "remove %spotify album"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "={{ $json.name }} by {{ $json.artists[0].name }}\n{{ $json.album.artists[0].external_urls.spotify }}",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "thumbnail": "={{ $json.album.images[1].url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        -240
+      ],
+      "id": "1d435b69-5c43-451d-a92c-f6c8c902d6ac",
+      "name": "send the message",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "=Artist: {{ $json.name }}\n{{ $json.external_urls.spotify }}",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "thumbnail": "={{ $json.images[1].url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        40
+      ],
+      "id": "2d2b7259-4c60-480c-b266-7ba47bf4d3c3",
+      "name": "send the message1",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "={{ $json.name }} by {{ $json.artists[0].name }}\n{{ $json.external_urls.spotify }}",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "thumbnail": "={{ $json.images[1].url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        320
+      ],
+      "id": "a1e28cff-1ef7-4dd9-ad60-18376435b892",
+      "name": "send the message2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Error handler",
+        "height": 320,
+        "width": 600,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -40,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "6cfb4e8b-d58a-4459-ad91-efffbe3abf6a",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "check what got sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spotify": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "send the message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spotify1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "send the message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spotify3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "send the message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "spotify api having issues",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check what got sent": {
+      "main": [
+        [
+          {
+            "node": "wait message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "remove %spotify music",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "wait message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "remove %spotify artist",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "wait message2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "remove %spotify album",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "nonexistant command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait message": {
+      "main": [
+        []
+      ]
+    },
+    "wait message1": {
+      "main": [
+        []
+      ]
+    },
+    "wait message2": {
+      "main": [
+        []
+      ]
+    },
+    "remove %spotify music": {
+      "main": [
+        [
+          {
+            "node": "Spotify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove %spotify artist": {
+      "main": [
+        [
+          {
+            "node": "Spotify1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove %spotify album": {
+      "main": [
+        [
+          {
+            "node": "Spotify3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send the message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send the message1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send the message2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1cd126fd-629a-45cd-bd3d-162e2c1ae9c6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a0bac48fea17e2b37b73f987dbd3e652027c2b7184e8b942e96a9eb80ec425a8"
+  },
+  "id": "xUR3aiukVnPRSHQE",
+  "tags": []
+}

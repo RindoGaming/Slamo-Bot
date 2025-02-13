@@ -1,0 +1,1 @@
+%ai You are getting presented to a bunch of other coders. Could you greet them in an appropriate way by writing a bit of code for greeting someone?

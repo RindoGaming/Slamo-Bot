@@ -1,0 +1,258 @@
+{
+  "name": "Slamo %forum",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are getting used as a bot to validate issues and give potential solutions for the code even if you are not able to see it.\n\nSomeone submitted an issue with the title: {{ $json.title }}\n\nThey are saying: {{ $json.body }}\n\nGenerate me potential fixes for this even though you are unable to see the file. And keep the amount of characters under 2000 including linebreaks, whitespace, etc.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        80,
+        -120
+      ],
+      "id": "ecc56d1a-c9ee-4d98-81ba-78a17213eee5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        80,
+        40
+      ],
+      "id": "93f19f80-8d31-4c6c-98a3-789255f263c9",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "Mq1Z1pk7AhNKaBCB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "what is your issue",
+        "formDescription": "give use a issue if you find a problem if there is no problem then do not send a issue",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "title",
+              "fieldType": "textarea",
+              "placeholder": "title of the issue",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "issue",
+              "fieldType": "textarea",
+              "placeholder": "issue",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "from what repository (example: https://github.com/RindoGaming/Silly-Site)",
+              "fieldType": "textarea",
+              "placeholder": "repository",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        -200
+      ],
+      "id": "1514f4a2-dad1-4969-ae60-40e9f6d6a924",
+      "name": "issue form",
+      "webhookId": "1bbf0d14-ed6f-4151-9cac-8f01b5dbbcd1"
+    },
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/RindoGaming",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ $json['from what repository (example: https://github.com/RindoGaming/Silly-Site)'] }}",
+          "mode": "url"
+        },
+        "title": "={{ $('issue form').item.json.title }}",
+        "body": "={{ $('issue form').item.json.issue }}",
+        "labels": [],
+        "assignees": []
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        -200
+      ],
+      "id": "ef0708f5-b7b2-4235-b5b1-5c83adf744fe",
+      "name": "GitHub",
+      "credentials": {
+        "githubApi": {
+          "id": "7xsSXmIYUBw8KVCT",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "=## You recieved an issue: {{ $json.title }}\n\nHere is a description of what the issue is: {{ $json.body }}\n\nPotential fixes are on the way!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        80,
+        -340
+      ],
+      "id": "51e395a3-a6f3-4c28-8933-437874ee40eb",
+      "name": "Initial Discord",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        420,
+        -120
+      ],
+      "id": "0f3b4466-cb6c-4f99-a265-56ec2d6856e5",
+      "name": "Response Discord",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Github report forum",
+        "height": 560,
+        "width": 1260,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -540,
+        -360
+      ],
+      "typeVersion": 1,
+      "id": "ec1a9ce0-c139-4439-a01d-f8efc8e953b6",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Response Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "issue form": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "main": [
+        [
+          {
+            "node": "Initial Discord",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "750ddffa-bf30-4b39-9190-61dfce8e23d0",
+  "meta": {
+    "instanceId": "a0bac48fea17e2b37b73f987dbd3e652027c2b7184e8b942e96a9eb80ec425a8"
+  },
+  "id": "J5VnSdAxUwJ9fLwU",
+  "tags": []
+}

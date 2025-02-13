@@ -1,0 +1,519 @@
+{
+  "name": "Slamo %data",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        40
+      ],
+      "id": "0e2a9470-3439-4fbe-977f-5c5d11588cae",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        920,
+        220
+      ],
+      "id": "662fbd67-637b-4025-842c-efdf0ea0dc81",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "add",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "add"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0d78b0d2-9bc4-421b-97de-2c02116cbe13",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "send",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "send"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0d71c7fb-c2ed-49fd-9318-b9ae29f9eafe",
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "%data help",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "help"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        60,
+        20
+      ],
+      "id": "e0ab4540-601a-42a7-9ff9-8d5e4e97d5d5",
+      "name": "Check the command"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "ERROR: Command does not exist\n\nIf you need help type %data help",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        520,
+        260
+      ],
+      "id": "1a8ae773-4d0e-41ee-a1fd-c31bba7ecdb6",
+      "name": "command does not exist",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "# %data commands:\n\n- %data add {DATA HERE}\n- %data send {ID}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        520,
+        80
+      ],
+      "id": "0a05bba8-41e9-4f71-a791-92abce0666e2",
+      "name": "send %data command list",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let input = $input.first().json.content;\nlet value = input.replace(\"%data send \", \"\");\nreturn [\n  {\n    output: value,\n    user: $input.first().json.userName,\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        -80
+      ],
+      "id": "664ca8c2-788c-4814-b2d4-7fcd0064ff36",
+      "name": "remove %data send"
+    },
+    {
+      "parameters": {
+        "jsCode": "let input = $input.first().json.content;\nlet value = input.replace(\"%data add \", \"\");\nreturn [\n  {\n    output: value,\n    user: $input.first().json.userName,\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        -240
+      ],
+      "id": "b9770119-c7ba-48af-873d-894b7ea90557",
+      "name": "remove %data add"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": 182788,
+        "tableId": 447270,
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": 3473644,
+              "fieldValue": "={{ $json.output }}"
+            },
+            {
+              "fieldId": 3473647,
+              "fieldValue": "={{ $json.user }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        780,
+        -240
+      ],
+      "id": "44d9846c-fe73-4e7c-bff8-425fd660015b",
+      "name": "add row",
+      "credentials": {
+        "baserowApi": {
+          "id": "S7D7Y9nrgtnqla75",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "databaseId": 182788,
+        "tableId": 447270,
+        "rowId": "={{ $json.output }}"
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        780,
+        -80
+      ],
+      "id": "82c882d7-7687-4af8-a74f-ea6df26c73da",
+      "name": "send row",
+      "credentials": {
+        "baserowApi": {
+          "id": "S7D7Y9nrgtnqla75",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "=Value added: {{ $json.Data }}\nAdded by: {{ $json[\"Added by:\"] }}\nYour ID is {{ $json.id }} you can send this by using %data send {{ $json.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        -240
+      ],
+      "id": "5472a53d-4f6a-4f66-9223-4e1505754b45",
+      "name": "send add message",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "=Sent id: {{ $json.id }}\n\nContents: {{ $json.Data }}\nAuthor: {{ $json['Added by:'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        -80
+      ],
+      "id": "9bd12d1b-9d11-4793-aa8a-bb275ada5afb",
+      "name": "send data",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338789261159436372",
+          "mode": "list",
+          "cachedResultName": "2lazy2debug",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338790128969187429",
+          "mode": "list",
+          "cachedResultName": "bot",
+          "cachedResultUrl": "https://discord.com/channels/1338789261159436372/1338790128969187429"
+        },
+        "content": "ERROR: ID does not exist.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        220
+      ],
+      "id": "1518a5ba-fcfc-4471-ae3e-0d0017fbe70d",
+      "name": "send id error",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ub5HIweE7P18UAOq",
+          "name": "Slamo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Add and send data from baserow",
+        "height": 700,
+        "width": 1620,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -180,
+        -280
+      ],
+      "typeVersion": 1,
+      "id": "f50dca1c-565c-4c8f-ba34-7363376eb0e8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Sends and error message when an invalid ID has been entered",
+        "height": 320,
+        "width": 640,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        800,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "afcc93e6-4a2a-4d9c-a503-3679f4e3436a",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Check the command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "send id error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the command": {
+      "main": [
+        [
+          {
+            "node": "remove %data add",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "remove %data send",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "send %data command list",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "command does not exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove %data send": {
+      "main": [
+        [
+          {
+            "node": "send row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove %data add": {
+      "main": [
+        [
+          {
+            "node": "add row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add row": {
+      "main": [
+        [
+          {
+            "node": "send add message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send row": {
+      "main": [
+        [
+          {
+            "node": "send data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b55d7286-feaa-4c28-94ee-653a4ffe4ebd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a0bac48fea17e2b37b73f987dbd3e652027c2b7184e8b942e96a9eb80ec425a8"
+  },
+  "id": "zIpkxwP6zwDrI5Lt",
+  "tags": []
+}
