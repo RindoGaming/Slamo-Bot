@@ -1,0 +1,14 @@
+wat ging er goed.
+
+- we hebben een werkende discord bot gemaakt met veel functionaliteit. 
+- we hebben bijna alle ideeën gebruikt.
+
+wat ging er niet goed.
+
+- dat we samen niet in 1 file makkelijk konden werken.
+- en dat een van ons max kon werken aan de code.
+
+wat kan er beter.
+
+- zorgen dat we met elkaar gemakkelijk in een file kunnen werken.
+- meer ideeën voor het project.

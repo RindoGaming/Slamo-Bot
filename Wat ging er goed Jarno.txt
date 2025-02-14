@@ -1,0 +1,14 @@
+Wat ging er goed
+
+- Het maken van het project
+- Het testen van het project
+
+Wat ging niet goed
+
+- Samen op 1 apparaat werken met n8n gaat erg lastig
+- Het klaarzetten van de discord custom node ging erg lastig
+
+Wat kan er verbeterd worden
+
+- Communicatie zat soms een beetje tussenin
+- Het bedenken van ideeën uiteindelijk begon lastig te worden
